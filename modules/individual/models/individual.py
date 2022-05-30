@@ -12,20 +12,17 @@ class Individual:
         self.fitness = 0
         self.cromossomo: list[Actions] = []
     
-    def generateGenes(self):
+    def generateGenes(self) -> None:
         for _ in range(self.numberPass):
             gene = random.randint(0, 6)
             action = Actions.getAction(gene)
             self.cromossomo.append(action)
     
-    def printGenes(self):
+    def printGenes(self) -> None:
         for i in range(self.cromossomo.__len__()):
             print(self.cromossomo[i].toString())
 
-    def getFitness(self):
-        return self.fitness
-
-    def calculateFitness(self, world: World):
+    def calculateFitness(self, world: World) -> None:
         posiInWorldx = POS_INICIAL
         posiInWorldy = POS_INICIAL
         _world = world.getWorld()
@@ -66,7 +63,7 @@ class Individual:
                     print(f'Mas o {LocalWorld.Vazio.toString()}')
                     self.fitness -= 1
 
-    def isParede(self, posiInWorldx, posiInWorldy, world: list[int]):
+    def isParede(self, posiInWorldx, posiInWorldy, world: list[int]) -> bool:
         if world[posiInWorldx][posiInWorldy] == LocalWorld.Parede.value:
             print(f'{LocalWorld.Parede.toString()}')
             return True

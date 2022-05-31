@@ -23,15 +23,3 @@ class LocalWorld(Enum):
             return LocalWorld.Parede
         else:
             Exception("Valor não identificado")
-
-#extesion para retornar uma string de acordo com uma data
-class LocalWorldExt(LocalWorld):
-    def toString(self):
-        if self == LocalWorld.Vazio:
-            return "Local está Vazio"
-        elif self == LocalWorld.Lata:
-            return "Há uma Lata neste local"
-        elif self == LocalWorld.Parede:
-            return "Há uma Parede à frente"
-        else:
-            Exception("Valor não identificado")

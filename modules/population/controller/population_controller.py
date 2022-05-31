@@ -2,14 +2,15 @@ import random
 from global_enums.enum_actions import Actions
 from modules.individual.models.individual import Individual
 from modules.population.models.population import Population
+from modules.world.models.world import World
 
 class PopulationController:
 
-    def __init__(self, sizePopulationStart: int, numberOfGerations: int = 5, mutationRate: float = 0.05):
+    def __init__(self, sizePopulationStart: int, world: World, numberOfGerations: int = 5, mutationRate: float = 0.05):
         self.sizePopulationStart = sizePopulationStart
         self.mutationRate = mutationRate
-        self.population = Population(sizePopulation=sizePopulationStart)
-        self.population.generatePopulation()
+        self.population = Population(sizePopulation=sizePopulationStart, world=world)
+        self.population.generatePopulation(numActionsIndividual=3)
         self.numberOfGerations = numberOfGerations
 
     def generateGerations(self) -> None:
@@ -22,14 +23,14 @@ class PopulationController:
         for individual in self.population.getIndividuals():
             if individual.fitness >= 0:
                 pais.append(individual)
-        pais.sort(reverse=True)
+        pais.sort(reverse=True, key=self._comparable)
 
         self.population.individuals = pais
 
         filhos = []
 
         while(len(filhos) < self.sizePopulationStart):
-            pai, mae = self.selectWithRoulette(pais)
+            pai, mae = self.selectWithRoulette()
             mid = len(pai.cromossomo) // 2
             filho = pai.cromossomo[:mid] + mae.cromossomo[mid:]
             filhos.append(filho)
@@ -42,7 +43,7 @@ class PopulationController:
     def sortToCrossover(self, fitnessTotal, skipIndice = -1) -> Individual:
         roulette = []
         accumulation = 0
-        randomValue = random()
+        randomValue = random.random()
 
         population = self.population.getIndividuals()
 
@@ -59,7 +60,7 @@ class PopulationController:
             if roulette[-1] >= randomValue:
                 return individual
 
-    def selectWithRoulette(self) -> tuple[Individual, Individual]:
+    def selectWithRoulette(self):
         fitnessTotal = self.population.getTotalFitenss()
         pai = self.sortToCrossover(fitnessTotal)
         mae = self.sortToCrossover(fitnessTotal, skipIndice=pai)
@@ -75,5 +76,7 @@ class PopulationController:
                 actionMutation = Actions.getAction(random.randint(0, 6))
                 individualCromosso[posMutation] = actionMutation
                 individual.cromossomo = individualCromosso
-                indexIndividual = self.population.individuals.index(individual)
-                self.population.individuals[indexIndividual] = individual
+                self.population.individuals = individual
+
+    def _comparable(self, individual):
+        return individual.fitness

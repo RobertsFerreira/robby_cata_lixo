@@ -1,3 +1,4 @@
+from global_enums.enum_locais import LocalWorld, LocalWorldExt
 from modules.individual.models.individual import Individual
 from modules.population.models.population import Population
 from modules.world.models.world import World

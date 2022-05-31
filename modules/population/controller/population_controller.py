@@ -24,10 +24,12 @@ class PopulationController:
                 pais.append(individual)
         pais.sort(reverse=True)
 
+        self.population.individuals = pais
+
         filhos = []
 
         while(len(filhos) < self.sizePopulationStart):
-            pai, mae = self.selectWithRoulette()
+            pai, mae = self.selectWithRoulette(pais)
             mid = len(pai.cromossomo) // 2
             filho = pai.cromossomo[:mid] + mae.cromossomo[mid:]
             filhos.append(filho)
@@ -73,4 +75,5 @@ class PopulationController:
                 actionMutation = Actions.getAction(random.randint(0, 6))
                 individualCromosso[posMutation] = actionMutation
                 individual.cromossomo = individualCromosso
-                self.population.individuals = individual
+                indexIndividual = self.population.individuals.index(individual)
+                self.population.individuals[indexIndividual] = individual

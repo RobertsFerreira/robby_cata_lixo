@@ -25,6 +25,9 @@ class PopulationController:
                 pais.append(individual)
         pais.sort(reverse=True, key=self._comparable)
 
+        if pais.__len__() == 0:
+            Exception('Não há individuos aptos para reprodução')
+
         self.population.individuals = pais
 
         filhos = []
@@ -43,7 +46,7 @@ class PopulationController:
     def sortToCrossover(self, fitnessTotal, skipIndice = -1) -> Individual:
         roulette = []
         accumulation = 0
-        randomValue = random.random()
+        offset = random.random()
 
         population = self.population.getIndividuals()
 
@@ -56,9 +59,18 @@ class PopulationController:
             if i == skipIndice:
                 continue
             accumulation = individual.fitness
-            roulette.append(accumulation / fitnessTotal)
-            if roulette[-1] >= randomValue:
-                return individual
+            roulette.append([i, accumulation / fitnessTotal])
+
+            # if roulette[-1] >= randomValue:
+            #     return individual
+
+        limitInferior = 0 if offset - 0.1 < 0 else offset - 0.1
+        limitSuperior = 1 if offset + 0.1 > 1 else offset + 0.1
+
+        for i, value in enumerate(roulette):
+            if limitInferior >= value and value <= limitSuperior:
+                index = roulette[i][0]
+                return population[index]
 
     def selectWithRoulette(self):
         fitnessTotal = self.population.getTotalFitenss()

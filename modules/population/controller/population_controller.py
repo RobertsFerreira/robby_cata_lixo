@@ -58,7 +58,16 @@ class PopulationController:
         for i, individual in enumerate(population):
             if i == skipIndice:
                 continue
-            accumulation = individual.fitness
+            accumulation = individual.fitnessmaps 
+            #  [
+    # {
+    #         'index': 1,
+    #         'value': 'a'
+    #     },
+        
+    # ]
+    #        #alterar mapa
+            # roulette.append(maps)
             roulette.append([i, accumulation / fitnessTotal])
 
             # if roulette[-1] >= randomValue:

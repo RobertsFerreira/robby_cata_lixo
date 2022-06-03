@@ -22,6 +22,15 @@ class Individual:
         for i in range(self.cromossomo.__len__()):
             print(self.cromossomo[i].toString())
 
+    def toMap(self):
+        individualMap = {
+                            'cromossomo': [cromo.value for cromo in self.cromossomo], 
+                            'fitness': self.fitness, 
+                            'numberPass': self.numberPass,
+                        }
+        return individualMap
+
+
     def calculateFitness(self, world: World) -> None:
         posiInWorldx = POS_INICIAL
         posiInWorldy = POS_INICIAL

@@ -1,4 +1,7 @@
 import random
+from typing import Tuple
+
+from pyparsing import empty
 from global_enums.enum_actions import Actions
 from modules.individual.models.individual import Individual
 from modules.population.models.population import Population
@@ -26,7 +29,7 @@ class PopulationController:
         pais.sort(reverse=True, key=self._comparable)
 
         if pais.__len__() == 0:
-            Exception('Não há individuos aptos para reprodução')
+            raise Exception('Não há individuos aptos para reprodução')
 
         self.population.individuals = pais
 
@@ -34,6 +37,8 @@ class PopulationController:
 
         while(len(filhos) < self.sizePopulationStart):
             pai, mae = self.selectWithRoulette()
+            # if mae.cromossomo is empty or pai.cromossomo is empty:
+            #     Exception('Erro ao selecionar individuos para reprodução')
             mid = len(pai.cromossomo) // 2
             filho = pai.cromossomo[:mid] + mae.cromossomo[mid:]
             filhos.append(filho)
@@ -58,7 +63,7 @@ class PopulationController:
         for i, individual in enumerate(population):
             if i == skipIndice:
                 continue
-            accumulation = individual.fitnessmaps 
+            accumulation = individual.fitness
             #  [
     # {
     #         'index': 1,
@@ -81,8 +86,10 @@ class PopulationController:
                 index = roulette[i][0]
                 return population[index]
 
-    def selectWithRoulette(self):
+    def selectWithRoulette(self) -> None | Tuple[Individual, Individual]:
         fitnessTotal = self.population.getTotalFitenss()
+        if fitnessTotal == 0:
+            raise Exception('Fitness total invalido')
         pai = self.sortToCrossover(fitnessTotal)
         mae = self.sortToCrossover(fitnessTotal, skipIndice=pai)
 

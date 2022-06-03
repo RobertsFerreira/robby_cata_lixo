@@ -1,7 +1,6 @@
 import random
 from typing import Tuple
 
-from pyparsing import empty
 from global_enums.enum_actions import Actions
 from modules.individual.models.individual import Individual
 from modules.population.models.population import Population
@@ -13,7 +12,7 @@ class PopulationController:
         self.sizePopulationStart = sizePopulationStart
         self.mutationRate = mutationRate
         self.population = Population(sizePopulation=sizePopulationStart, world=world)
-        self.population.generatePopulation(numActionsIndividual=3)
+        self.population.generatePopulation(numActionsIndividual=3, getSaved=True)
         self.numberOfGerations = numberOfGerations
 
     def generateGerations(self) -> None:

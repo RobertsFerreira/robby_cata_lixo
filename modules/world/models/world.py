@@ -1,11 +1,14 @@
 import random
 from typing_extensions import Self
 
+from modules.helpers.help_file import HelpFile
+
 class World:
     def __init__(self, size: int, withParede: bool = True, _world: list[int]=[]):
         self.withParede = withParede
         self._world = _world
         self._sizeWorld = (size + 2) if self.withParede else size
+        self.helpFile = HelpFile()
 
     def generateWorld(self) -> None | Exception:
         try:
@@ -26,10 +29,6 @@ class World:
     def getWorld(self) -> list[list[int]]:
         return self._world
 
-    def _getPorcentSave(self, sizeTotalWorld: int, posiInWorld: int) -> float:
-        porcent = (posiInWorld / sizeTotalWorld) * 100
-        return round(porcent, 2)
-
     def toFile(self, file) -> None | Exception:
         try:
             posiInWorld = 0
@@ -38,7 +37,7 @@ class World:
                 for j in range(self._world[i].__len__()):
                     posiInWorld += 1
                     file.write(str(self._world[i][j]) + ' ')
-                    percent = self._getPorcentSave(sizeTotalWorld=sizeTotalWorld, posiInWorld=posiInWorld)
+                    percent = self.helpFile.getPorcentSave(size=sizeTotalWorld, position=posiInWorld)
                     print(f'Progesso: {percent}%')
                 file.write('\n')
         except Exception as e:

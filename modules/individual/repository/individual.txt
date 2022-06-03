@@ -1,0 +1,3 @@
+{'cromossomos': [5, 1, 6], 'fitness': 10, 'numberPass': 3}
+{'cromossomos': [2, 5, 3], 'fitness': 0, 'numberPass': 3}
+{'cromossomos': [1, 3, 0], 'fitness': -5, 'numberPass': 3}

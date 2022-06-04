@@ -41,12 +41,12 @@ class Individual:
         posiInWorldy = POS_INICIAL
         _world = world.getWorld()
         for i in range(self.cromossomos.__len__()):
-            print(self.cromossomos[i].toString())
+            # print(self.cromossomos[i].toString())
             if self.cromossomos[i] == Actions.MoveAleatorio:
                 gene = random.randint(0,3)
                 action = Actions.getAction(gene)
                 self.cromossomos[i] = action
-                print(f'{self.cromossomos[i].toString().replace("Moveu", "")}')
+                # print(f'{self.cromossomos[i].toString().replace("Moveu", "")}')
 
             if self.cromossomos[i] == Actions.MoveNorte:
                 if self.isParede(posiInWorldx - 1, posiInWorldy, _world):
@@ -74,12 +74,12 @@ class Individual:
                 if _world[posiInWorldx][posiInWorldy] == LocalWorld.Lata.value:
                     self.fitness += 10
                 else:
-                    print(f'Mas o {LocalWorld.Vazio.toString()}')
+                    # print(f'Mas o {LocalWorld.Vazio.toString()}')
                     self.fitness -= 1
 
     def isParede(self, posiInWorldx, posiInWorldy, world: list[int]) -> bool:
         if world[posiInWorldx][posiInWorldy] == LocalWorld.Parede.value:
-            print(f'{LocalWorld.Parede.toString()}')
+            # print(f'{LocalWorld.Parede.toString()}')
             return True
         else:
             return False

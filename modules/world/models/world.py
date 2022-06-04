@@ -29,7 +29,7 @@ class World:
     def getWorld(self) -> list[list[int]]:
         return self._world
 
-    def toFile(self, file) -> None | Exception:
+    def toFile(self, file) -> Exception | None:
         try:
             posiInWorld = 0
             sizeTotalWorld = self._getSize(total=True)
@@ -43,7 +43,7 @@ class World:
         except Exception as e:
             return e
 
-    def fromFile(linhas: list[str]) -> Self | Exception:
+    def fromFile(linhas: list[str]) -> Exception | Self:
         try:
             _world = []
             for i in range(linhas.__len__()):

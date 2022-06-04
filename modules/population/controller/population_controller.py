@@ -1,6 +1,4 @@
-from pyclbr import Function
 import random
-from types import MethodType
 from typing import Tuple
 
 from global_enums.enum_actions import Actions
@@ -19,99 +17,110 @@ class PopulationController:
         self.numberOfGerations = numberOfGerations
 
     def generateGerations(self) -> None:
-        for _ in range(self.numberOfGerations):
-            self.population = self.evolution()
+        try:
+            for _ in range(self.numberOfGerations):
+                self.population = self.evolution()
+        except Exception as e:
+            return e
 
-    def evolution(self) -> Population:
-        pais = []
+    def evolution(self) -> Exception | Population:
+        try:
+            pais = []
 
-        for individual in self.population.getIndividuals():
-            if individual.fitness >= 0:
-                pais.append(individual)
-        pais.sort(reverse=True, key=self._comparable)
+            for individual in self.population.getIndividuals():
+                if individual.fitness >= 0:
+                    pais.append(individual)
+            pais.sort(reverse=True, key=self._comparable)
 
-        if pais.__len__() == 0:
-            raise Exception('Não há individuos aptos para reprodução')
+            if pais.__len__() == 0:
+                raise Exception('Não há individuos aptos para reprodução')
 
-        self.population.individuals = pais
+            self.population.individuals = pais
 
-        filhos = []
+            filhos = []
 
-        while(len(filhos) < self.sizePopulationStart):
-            pai, mae = self.selectWithRoulette()
-            mid = len(pai.cromossomos) // 2
-            filho = Individual(pai.numberPass)
-            filho.cromossomos = pai.cromossomos[:mid] + mae.cromossomos[mid:]
-            filho.calculateFitness(world=self._world)
-            filhos.append(filho)
+            while(len(filhos) < self.sizePopulationStart):
+                pai, mae = self.selectWithRoulette()
+                mid = len(pai.cromossomos) // 2
+                filho = Individual(pai.numberPass)
+                filho.cromossomos = pai.cromossomos[:mid] + mae.cromossomos[mid:]
+                filho.calculateFitness(world=self._world)
+                filhos.append(filho)
 
-        self.population.individuals = filhos
-        self.mutation(self.mutationRate)
+            self.population.individuals = filhos
+            self.mutation(self.mutationRate)
 
-        return self.population        
+            return self.population  
+        except Exception as e:
+            return e
 
-    def sortToCrossover(self, fitnessTotal, skipIndice = -1) -> Individual:
-        roulette = []
-        accumulation = 0
-        offset = random.randint(0, 100)
+    def sortToCrossover(self, fitnessTotal, skipIndice = -1) -> Exception | Individual:
+        try:
+            roulette = []
+            accumulation = 0
+            offset = random.randint(0, 100)
 
-        population = self.population.getIndividuals()
+            population = self.population.getIndividuals()
 
-        if skipIndice != -1:
-            individual = population[skipIndice]
-            fitnessTotal -= individual.fitness
-        
-        for i, individual in enumerate(population):
-            if i == skipIndice:
-                continue
+            if skipIndice != -1:
+                individual = population[skipIndice]
+                fitnessTotal -= individual.fitness
 
-            # if roulette[-1] >= randomValue:
-            #     return individual
+            for i, individual in enumerate(population):
+                if i == skipIndice:
+                    continue
 
-            min = roulette[-1]['max'] if accumulation > 0 else 0
-            _percent = (individual.fitness/fitnessTotal) * 100
-            percent = round(_percent, 2)
-            accumulation += percent
-            accumulation = round(accumulation, 2)
-            max = accumulation if accumulation < 100 and i != (population.__len__() - 1) else 100
+                min = roulette[-1]['max'] if accumulation > 0 else 0
+                _percent = (individual.fitness/fitnessTotal) * 100
+                percent = round(_percent, 2)
+                accumulation += percent
+                accumulation = round(accumulation, 2)
+                max = accumulation if accumulation < 100 and i != (population.__len__() - 1) else 100
 
-            mapFitness = {
-                'index': i,
-                'min': min,
-                'max': max
-            }
-            roulette.append(mapFitness)
+                mapFitness = {
+                    'index': i,
+                    'min': min,
+                    'max': max
+                }
+                roulette.append(mapFitness)
 
-        for i, individual in enumerate(roulette):
-            if individual['min'] <= offset <= individual['max']:
-                return population[individual['index']]
+            for i, individual in enumerate(roulette):
+                if individual['min'] <= offset <= individual['max']:
+                    return population[individual['index']]
+        except Exception as e:
+            return e
 
-        print('Erro ao selecionar individuos para reprodução')
 
-    def selectWithRoulette(self) -> None | Tuple[Individual, Individual]:
-        fitnessTotal = self.population.getTotalFitenss()
-        if fitnessTotal == 0:
-            raise Exception('Fitness total invalido')
-        pai = self.sortToCrossover(fitnessTotal)
-        indexPai = self.population.getIndividuals().index(pai)
-        mae = self.sortToCrossover(fitnessTotal, skipIndice=indexPai)
-        if mae is None:
-            mae = pai
+    def selectWithRoulette(self) -> Exception | Tuple[Individual, Individual]:
+        try:
+            fitnessTotal = self.population.getTotalFitenss()
+            if fitnessTotal == 0:
+                raise Exception('Fitness total invalido')
+            pai = self.sortToCrossover(fitnessTotal)
+            indexPai = self.population.getIndividuals().index(pai)
+            mae = self.sortToCrossover(fitnessTotal, skipIndice=indexPai)
+            if mae is None:
+                mae = pai
 
-        return pai, mae
+            return pai, mae
+        except Exception as e:
+            return e
 
-    def mutation(self, mutationRate: float) -> None: 
-        _individuals = self.population.getIndividuals()
-        for index, individual in enumerate(_individuals): 
-            randomMutation = random.random() 
-            if mutationRate > randomMutation:
-                individualCromosso = individual.cromossomos
-                posMutation = random.randint(0, individualCromosso.__len__() - 1)
-                actionMutation = Actions.getAction(random.randint(0, 6))
-                individualCromosso[posMutation] = actionMutation
-                individual.cromossomos = individualCromosso
-                individual.calculateFitness(world=self._world)
-                self.population.individuals[index] = individual
+    def mutation(self, mutationRate: float) -> Exception | None: 
+        try:
+            _individuals = self.population.getIndividuals()
+            for index, individual in enumerate(_individuals): 
+                randomMutation = random.random() 
+                if mutationRate > randomMutation:
+                    individualCromosso = individual.cromossomos
+                    posMutation = random.randint(0, individualCromosso.__len__() - 1)
+                    actionMutation = Actions.getAction(random.randint(0, 6))
+                    individualCromosso[posMutation] = actionMutation
+                    individual.cromossomos = individualCromosso
+                    individual.calculateFitness(world=self._world)
+                    self.population.individuals[index] = individual
+        except Exception as e:
+            return e
 
     def printPopulation(self) -> None:
         print()

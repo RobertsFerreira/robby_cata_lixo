@@ -28,20 +28,21 @@ class Population:
                 individual.calculateFitness(world=self.world)
                 self.individuals.append(individual)
             if saveGeneration: self._saveFile()
-        
 
     def getBestIndividual(self) -> Individual:
-        for _, individual in enumerate(self.individuals):
+        for index, individual in enumerate(self.individuals):
             if self.bestIndividual is None:
                 self.bestIndividual = individual
-            elif individual.fitness() > self.bestIndividual.fitness():
-                    self.bestIndividual = individual
-        
-        index = self.individuals.index(self.bestIndividual)
-        
-        print(f'Melhor individuo: {index+1} | Fitness: {self.bestIndividual.fitness()}')
-
-        return self.individuals[index]
+                _index = index + 1
+            elif individual.fitness > self.bestIndividual.fitness:
+                self.bestIndividual = individual
+                _index = index + 1
+            
+        print(f'Melhor individuo: {_index} | Fitness: {self.bestIndividual.fitness}')
+        print(f'Numero de Ações: {self.bestIndividual.numberPass}')
+        print(f'       Ações         ')
+        self.bestIndividual.printGenes()
+        print()
         
     def getAverageFitness(self) -> float:
         for individual in self.individuals:
@@ -60,6 +61,17 @@ class Population:
 
     def getSize(self) -> int:
         return self.sizePopulation
+
+    def printPopulation(self):
+        for index, individual in enumerate(self.individuals):
+            print(f'Individuo: {index+1}')
+            print(f'Fitnes: {individual.fitness}')
+            print(f'Numero de Ações: {individual.numberPass}')
+            print(f'       Ações         ')
+            individual.printGenes()
+            print()
+            print('-----------------------------------------')
+            print()
 
     def _saveFile(self):
         try:

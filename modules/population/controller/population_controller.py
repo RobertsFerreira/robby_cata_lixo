@@ -1,4 +1,6 @@
+from pyclbr import Function
 import random
+from types import MethodType
 from typing import Tuple
 
 from global_enums.enum_actions import Actions
@@ -8,11 +10,12 @@ from modules.world.models.world import World
 
 class PopulationController:
 
-    def __init__(self, sizePopulationStart: int, world: World, numberOfGerations: int = 5, mutationRate: float = 0.05):
+    def __init__(self, sizePopulationStart: int, world: World, numberOfGerations: int = 5, mutationRate: float = 0.1):
         self.sizePopulationStart = sizePopulationStart
         self.mutationRate = mutationRate
+        self._world = world
         self.population = Population(sizePopulation=sizePopulationStart, world=world)
-        self.population.generatePopulation(numActionsIndividual=7, getSaved=True)
+        self.population.generatePopulation(numActionsIndividual=200,  getSaved=True)
         self.numberOfGerations = numberOfGerations
 
     def generateGerations(self) -> None:
@@ -36,10 +39,10 @@ class PopulationController:
 
         while(len(filhos) < self.sizePopulationStart):
             pai, mae = self.selectWithRoulette()
-            # if mae.cromossomo is empty or pai.cromossomo is empty:
-            #     Exception('Erro ao selecionar individuos para reprodução')
             mid = len(pai.cromossomos) // 2
-            filho = pai.cromossomos[:mid] + mae.cromossomos[mid:]
+            filho = Individual(pai.numberPass)
+            filho.cromossomos = pai.cromossomos[:mid] + mae.cromossomos[mid:]
+            filho.calculateFitness(world=self._world)
             filhos.append(filho)
 
         self.population.individuals = filhos
@@ -50,7 +53,7 @@ class PopulationController:
     def sortToCrossover(self, fitnessTotal, skipIndice = -1) -> Individual:
         roulette = []
         accumulation = 0
-        offset = random.random()
+        offset = random.randint(0, 100)
 
         population = self.population.getIndividuals()
 
@@ -66,8 +69,11 @@ class PopulationController:
             #     return individual
 
             min = roulette[-1]['max'] if accumulation > 0 else 0
-            accumulation += round((individual.fitness/fitnessTotal), 2)
-            max = accumulation if accumulation < 1 else 1
+            _percent = (individual.fitness/fitnessTotal) * 100
+            percent = round(_percent, 2)
+            accumulation += percent
+            accumulation = round(accumulation, 2)
+            max = accumulation if accumulation < 100 and i != (population.__len__() - 1) else 100
 
             mapFitness = {
                 'index': i,
@@ -80,6 +86,8 @@ class PopulationController:
             if individual['min'] <= offset <= individual['max']:
                 return population[individual['index']]
 
+        print('Erro ao selecionar individuos para reprodução')
+
     def selectWithRoulette(self) -> None | Tuple[Individual, Individual]:
         fitnessTotal = self.population.getTotalFitenss()
         if fitnessTotal == 0:
@@ -87,20 +95,29 @@ class PopulationController:
         pai = self.sortToCrossover(fitnessTotal)
         indexPai = self.population.getIndividuals().index(pai)
         mae = self.sortToCrossover(fitnessTotal, skipIndice=indexPai)
+        if mae is None:
+            mae = pai
 
         return pai, mae
 
     def mutation(self, mutationRate: float) -> None: 
-        randomMutation = random.random() 
-        for individual in self.population.getIndividuals():
+        _individuals = self.population.getIndividuals()
+        for index, individual in enumerate(_individuals): 
+            randomMutation = random.random() 
             if mutationRate > randomMutation:
-                individualCromosso = individual.cromossomo
+                individualCromosso = individual.cromossomos
                 posMutation = random.randint(0, individualCromosso.__len__() - 1)
                 actionMutation = Actions.getAction(random.randint(0, 6))
                 individualCromosso[posMutation] = actionMutation
-                individual.cromossomo = individualCromosso
-                self.population.individuals = individual
+                individual.cromossomos = individualCromosso
+                individual.calculateFitness(world=self._world)
+                self.population.individuals[index] = individual
+
+    def printPopulation(self) -> None:
+        print()
+        self.population.printPopulation()
+        print()
+        self.population.getBestIndividual()
 
     def _comparable(self, individual):
-        return individual.fitness   
-    
+        return individual.fitness

@@ -15,7 +15,7 @@ def main():
         worldFile.printWorld()
 
         # definir tamanho da polução    
-        populationController = PopulationController(sizePopulationStart=3, world=worldFile)
+        populationController = PopulationController(sizePopulationStart=7, world=worldFile)
 
         populationController.generateGerations()
 

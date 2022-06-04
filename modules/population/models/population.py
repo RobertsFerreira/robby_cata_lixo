@@ -23,7 +23,7 @@ class Population:
         else:
             for _ in range(self.sizePopulation):
                 # a pensar: Deixar o numero de passos fixo ou receber por parametro
-                individual = Individual(numActionsIndividual, cromossomo=[])
+                individual = Individual(numActionsIndividual, cromossomos=[])
                 individual.generateGenes()
                 individual.calculateFitness(world=self.world)
                 self.individuals.append(individual)
@@ -93,7 +93,7 @@ class Population:
                     individual = Individual.fromMap(individualMap=_linha)
                     _individuals.append(individual)
                     
-                self.sizePopulation=len(_individuals),
+                self.sizePopulation=_individuals.__len__(),
                 self.world=world,
                 self.individuals=_individuals                
                     

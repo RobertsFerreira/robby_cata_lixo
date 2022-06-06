@@ -6,6 +6,8 @@ from modules.world.models.world import World
 
 POS_INICIAL = 1
 
+    #TODO: Adicionar Try/Except nas funcoes e adicionar os tipos de retornos corretos
+
 class Individual:
     def __init__(self, numberPass = 5, fitness: int = 0, cromossomos: list[Actions] = []):
         self.numberPass = numberPass

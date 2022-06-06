@@ -6,6 +6,8 @@ from modules.world.models.world import World
 
 class Population:
 
+    #TODO: Adicionar Try/Except nas funcoes e adicionar os tipos de retornos corretos
+
     _PATHFILE = 'modules/individual/repository/individual.txt'
 
     def __init__(self, sizePopulation: int, world: World):
@@ -17,7 +19,6 @@ class Population:
         self.helpFile = HelpFile()
 
     def generatePopulation(self, numActionsIndividual: int = 200,  getSaved = False, saveGeneration = False) -> None:
-        
         if getSaved:
             self._getFile(world=self.world)
         else:

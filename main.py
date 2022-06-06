@@ -7,6 +7,8 @@ from modules.world.controller.world_controller import WorldController
 
 def main():
 
+    #TODO: Ler o arquivo de configuração
+
     try:
         # world = World(size=10, withParede=True)
         worldController = WorldController()

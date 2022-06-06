@@ -7,7 +7,7 @@ class WorldController:
     
     _PATHFILE = 'modules/world/repository/world.txt'
 
-    def saveWorld(self, world: World) -> None | Exception:
+    def saveWorld(self, world: World) -> Exception | None:
         try:
             print('Salvando mundo...')
             if not os.path.exists(self._PATHFILE):
@@ -20,7 +20,7 @@ class WorldController:
             return e
                     
 
-    def getWorldFile(self) -> World | Exception:
+    def getWorldFile(self) -> Exception | World:
         try:
             if os.path.exists(self._PATHFILE):
                 file = open(self._PATHFILE, 'r')

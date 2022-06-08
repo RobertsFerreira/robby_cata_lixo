@@ -10,22 +10,22 @@ def main():
     #TODO: Ler o arquivo de configuração
 
     try:
-        # world = World(size=10, withParede=True)
-        worldController = WorldController()
-        # world.generateWorld()
+        world = World(size=10, withParede=True)
+        # worldController = WorldController()
+        world.generateWorld()
         # worldController.saveWorld(world= world)
-        worldFile = worldController.getWorldFile()
+        # worldFile = worldController.getWorldFile()
         print()
         print('        World       ')
         print()
         print('-----------------------------------------')
         print()
-        worldFile.printWorld()
+        # worldFile.printWorld()
         print()
         print('-----------------------------------------')
 
         # definir tamanho da polução    
-        populationController = PopulationController(sizePopulationStart=50, numberOfGerations=20, world=worldFile)
+        populationController = PopulationController(sizePopulationStart=10, numberOfGerations=3, world=world)
 
         populationController.generateGerations()
 

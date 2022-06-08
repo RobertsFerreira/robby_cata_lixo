@@ -1,6 +1,7 @@
 import os
 
 from modules.helpers.help_file import HelpFile
+from modules.helpers.help_list import comparable
 from modules.individual.models.individual import Individual
 from modules.world.models.world import World
 
@@ -41,8 +42,8 @@ class Population:
             
         print(f'Melhor individuo: {_index} | Fitness: {self.bestIndividual.fitness}')
         print(f'Numero de Ações: {self.bestIndividual.numberPass}')
-        print(f'       Ações         ')
-        self.bestIndividual.printGenes()
+        # print(f'       Ações         ')
+        # self.bestIndividual.printGenes()
         print()
         
     def getAverageFitness(self) -> float:
@@ -64,12 +65,13 @@ class Population:
         return self.sizePopulation
 
     def printPopulation(self):
+        _individuals = self.individuals.sort(reverse=True, key=comparable)
         for index, individual in enumerate(self.individuals):
             print(f'Individuo: {index+1}')
             print(f'Fitnes: {individual.fitness}')
             print(f'Numero de Ações: {individual.numberPass}')
-            print(f'       Ações         ')
-            individual.printGenes()
+            # print(f'       Ações         ')
+            # individual.printGenes()
             print()
             print('-----------------------------------------')
             print()

@@ -2,18 +2,19 @@ import random
 from typing import Tuple
 
 from global_enums.enum_actions import Actions
+from modules.helpers.help_list import comparable
 from modules.individual.models.individual import Individual
 from modules.population.models.population import Population
 from modules.world.models.world import World
 
 class PopulationController:
 
-    def __init__(self, sizePopulationStart: int, world: World, numberOfGerations: int = 5, mutationRate: float = 0.1):
+    def __init__(self, sizePopulationStart: int, world: World, numberOfGerations: int = 5, mutationRate: float = 0.13):
         self.sizePopulationStart = sizePopulationStart
         self.mutationRate = mutationRate
         self._world = world
         self.population = Population(sizePopulation=sizePopulationStart, world=world)
-        self.population.generatePopulation(numActionsIndividual=200,  getSaved=True)
+        self.population.generatePopulation(numActionsIndividual=200)
         self.numberOfGerations = numberOfGerations
 
     def generateGerations(self) -> None:
@@ -30,7 +31,8 @@ class PopulationController:
             for individual in self.population.getIndividuals():
                 if individual.fitness >= 0:
                     pais.append(individual)
-            pais.sort(reverse=True, key=self._comparable)
+            pais = self.population.getIndividuals()
+            pais.sort(key=comparable)
 
             if pais.__len__() == 0:
                 raise Exception('Não há individuos aptos para reprodução')
@@ -128,5 +130,5 @@ class PopulationController:
         print()
         self.population.getBestIndividual()
 
-    def _comparable(self, individual):
+    def comparable(self, individual):
         return individual.fitness

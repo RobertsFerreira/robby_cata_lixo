@@ -1,0 +1,7 @@
+{
+    "sizePopulation": 20,
+    "numberOfGerations": 20,
+    "mutationRate": 0.1,
+    "crossoverRate": 0.5,
+    "numActionsIndividual": 200
+}

@@ -13,9 +13,9 @@
 
                                                         **CIÊNCIA DA COMPUTAÇÃO**
 
-                                                                                        Autores : Robert Ferreira
+                                                                                   Autores : Robert Ferreira
 
-                                                                                                  Taylor Ambrósio                                    
+                                                                                             Taylor Ambrósio                                    
 
                                                               **Ubá**
 

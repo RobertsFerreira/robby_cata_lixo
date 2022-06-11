@@ -83,9 +83,7 @@ A Linguagem de programação escolhida pela equipe para desenvolver o projeto fo
 
 ## Abaixo apresentamos como foi feita a Função de evolução da população : 
 
-
 ![image](https://user-images.githubusercontent.com/88808709/173194657-ed771b7e-580e-456c-ab2a-1f37507d1975.png)
-
 
 ## Abaixo apresentamos como foi feita a Função de seleção para a roleta: 
 

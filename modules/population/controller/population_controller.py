@@ -2,7 +2,8 @@ import random
 from typing import Tuple
 
 from global_enums.enum_actions import Actions
-from modules.helpers.help_list import comparable
+from instances_global.instances import Instance
+from modules.helpers.help_utils import comparable
 from modules.individual.models.individual import Individual
 from modules.population.models.population import Population
 from modules.world.models.world import World
@@ -10,11 +11,12 @@ from modules.world.models.world import World
 class PopulationController:
 
     def __init__(self, sizePopulationStart: int, world: World, numberOfGerations: int = 5, mutationRate: float = 0.13):
+        self.config = Instance.config()
         self.sizePopulationStart = sizePopulationStart
         self.mutationRate = mutationRate
         self._world = world
         self.population = Population(sizePopulation=sizePopulationStart, world=world)
-        self.population.generatePopulation(numActionsIndividual=200)
+        self.population.generatePopulation(numActionsIndividual=self.config.getNumActionsIndividual(), getSaved=self.config.getGetSaved(), saveGeneration=self.config.getSaveGeneration())
         self.numberOfGerations = numberOfGerations
 
     def generateGerations(self) -> None:
@@ -28,10 +30,12 @@ class PopulationController:
         try:
             pais = []
 
-            for individual in self.population.getIndividuals():
-                if individual.fitness >= 0:
-                    pais.append(individual)
-            pais = self.population.getIndividuals()
+            if self.config.getNegativeFitness():
+                pais = self.population.getIndividuals()
+            else:
+                for individual in self.population.getIndividuals():
+                    if individual.fitness >= 0:
+                        pais.append(individual)
             pais.sort(key=comparable)
 
             if pais.__len__() == 0:
@@ -101,8 +105,8 @@ class PopulationController:
             pai = self.sortToCrossover(fitnessTotal)
             indexPai = self.population.getIndividuals().index(pai)
             mae = self.sortToCrossover(fitnessTotal, skipIndice=indexPai)
-            if mae is None:
-                mae = pai
+            # if mae is None:
+            #     mae = pai
 
             return pai, mae
         except Exception as e:

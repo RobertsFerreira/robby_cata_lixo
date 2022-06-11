@@ -1,31 +1,40 @@
 import traceback
-from modules.individual.models.individual import Individual
+from instances_global.instances import Instance
 from modules.population.controller.population_controller import PopulationController
-from modules.population.models.population import Population
 from modules.world.models.world import World
 from modules.world.controller.world_controller import WorldController
+from modules.helpers.help_utils import pause
 
 def main():
-
-    #TODO: Ler o arquivo de configuração
-
+    
     try:
-        world = World(size=10, withParede=True)
-        # worldController = WorldController()
-        world.generateWorld()
-        # worldController.saveWorld(world= world)
-        # worldFile = worldController.getWorldFile()
+
+        config = Instance.config()
+
+        world = World(size=config.getSizeWorld(), withParede=config.getWithParede())
+        
+        if config.getGenerateWorld():
+            world.generateWorld()
+
+        worldController = WorldController()
+        
+        if config.getSaveWorld():
+            worldController.saveWorld(world=world)
+
+        if config.getGetSavedWorld():
+            world = worldController.getWorldFile()
+            
         print()
         print('        World       ')
+        if config.getPrintWorld():
+            print()
+            print('-----------------------------------------')
+            print()
+            world.printWorld()
         print()
         print('-----------------------------------------')
-        print()
-        # worldFile.printWorld()
-        print()
-        print('-----------------------------------------')
-
-        # definir tamanho da polução    
-        populationController = PopulationController(sizePopulationStart=10, numberOfGerations=3, world=world)
+  
+        populationController = PopulationController(sizePopulationStart=config.getSizePopulation(), numberOfGerations=config.getNumberOfGerations(), world=world)
 
         populationController.generateGerations()
 
@@ -35,4 +44,6 @@ def main():
         print(e)
         print(traceback.format_exc())
     
+    pause()
+
 main()

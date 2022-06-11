@@ -1,18 +1,21 @@
 import os
+from instances_global.instances import Instance
 
 from modules.helpers.help_file import HelpFile
 from ..models.world import World
 
 class WorldController:
     
-    _PATHFILE = 'modules/world/repository/world.txt'
+    config = Instance.config()
 
+    pathFileWorld = config.getPathFileWorld()
+    
     def saveWorld(self, world: World) -> Exception | None:
         try:
             print('Salvando mundo...')
-            if not os.path.exists(self._PATHFILE):
-                HelpFile.createFile(pathFile=self._PATHFILE, suffix='world.txt')            
-            file = open(self._PATHFILE, 'w')
+            if not os.path.exists(self.pathFileWorld):
+                HelpFile.createFile(pathFile=self.pathFileWorld, suffix='world.txt')            
+            file = open(self.pathFileWorld, 'w')
             world.toFile(file=file)
             file.close()
             print('Mundo salvo com sucesso')
@@ -22,8 +25,8 @@ class WorldController:
 
     def getWorldFile(self) -> Exception | World:
         try:
-            if os.path.exists(self._PATHFILE):
-                file = open(self._PATHFILE, 'r')
+            if os.path.exists(self.pathFileWorld):
+                file = open(self.pathFileWorld, 'r')
                 linhas = file.readlines()
                 world = World.fromFile(linhas=linhas)
                 file.close()

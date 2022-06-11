@@ -1,15 +1,15 @@
+import json
 import os
+from instances_global.instances import Instance
 
 from modules.helpers.help_file import HelpFile
-from modules.helpers.help_list import comparable
+from modules.helpers.help_utils import comparable
 from modules.individual.models.individual import Individual
 from modules.world.models.world import World
 
 class Population:
 
     #TODO: Adicionar Try/Except nas funcoes e adicionar os tipos de retornos corretos
-
-    _PATHFILE = 'modules/individual/repository/individual.txt'
 
     def __init__(self, sizePopulation: int, world: World):
         self.sizePopulation = sizePopulation
@@ -18,33 +18,40 @@ class Population:
         self.averageFitness = 0.0
         self.world = world
         self.helpFile = HelpFile()
+        self.config = Instance.config()
 
     def generatePopulation(self, numActionsIndividual: int = 200,  getSaved = False, saveGeneration = False) -> None:
-        if getSaved:
-            self._getFile(world=self.world)
-        else:
-            for _ in range(self.sizePopulation):
-                # a pensar: Deixar o numero de passos fixo ou receber por parametro
-                individual = Individual(numActionsIndividual, cromossomos=[])
-                individual.generateGenes()
-                individual.calculateFitness(world=self.world)
-                self.individuals.append(individual)
-            if saveGeneration: self._saveFile()
+        try:
+            if getSaved:
+                self._getFile(world=self.world)
+            else:
+                for _ in range(self.sizePopulation):
+                    # a pensar: Deixar o numero de passos fixo ou receber por parametro
+                    individual = Individual(numActionsIndividual, cromossomos=[])
+                    individual.generateGenes()
+                    individual.calculateFitness(world=self.world)
+                    self.individuals.append(individual)
+                if saveGeneration: self._saveFile()
+        except Exception as e:
+            raise e
 
     def getBestIndividual(self) -> Individual:
-        for index, individual in enumerate(self.individuals):
-            if self.bestIndividual is None:
-                self.bestIndividual = individual
-                _index = index + 1
-            elif individual.fitness > self.bestIndividual.fitness:
-                self.bestIndividual = individual
-                _index = index + 1
-            
-        print(f'Melhor individuo: {_index} | Fitness: {self.bestIndividual.fitness}')
-        print(f'Numero de Ações: {self.bestIndividual.numberPass}')
-        # print(f'       Ações         ')
-        # self.bestIndividual.printGenes()
-        print()
+        try:
+            for index, individual in enumerate(self.individuals):
+                if self.bestIndividual is None:
+                    self.bestIndividual = individual
+                    _index = index + 1
+                elif individual.fitness > self.bestIndividual.fitness:
+                    self.bestIndividual = individual
+                    _index = index + 1
+                
+            print(f'Melhor individuo: {_index} | Fitness: {self.bestIndividual.fitness}')
+            print(f'Numero de Ações: {self.bestIndividual.numberPass}')
+            # print(f'       Ações         ')
+            # self.bestIndividual.printGenes()
+            print()
+        except Exception as e:
+            raise e
         
     def getAverageFitness(self) -> float:
         for individual in self.individuals:
@@ -65,13 +72,11 @@ class Population:
         return self.sizePopulation
 
     def printPopulation(self):
-        _individuals = self.individuals.sort(reverse=True, key=comparable)
+        self.individuals.sort(reverse=True, key=comparable)
         for index, individual in enumerate(self.individuals):
             print(f'Individuo: {index+1}')
             print(f'Fitnes: {individual.fitness}')
             print(f'Numero de Ações: {individual.numberPass}')
-            # print(f'       Ações         ')
-            # individual.printGenes()
             print()
             print('-----------------------------------------')
             print()
@@ -79,16 +84,16 @@ class Population:
     def _saveFile(self):
         try:
             print('Salvando individuo...')
-            if os.path.exists(self._PATHFILE):
-                os.remove(self._PATHFILE)
+            if os.path.exists(self.config.getPathFileIndividual()):
+                os.remove(self.config.getPathFileIndividual())
             else:
-                self.helpFile.createFile(pathFile=self._PATHFILE, suffix='individual.txt')            
-            file = open(self._PATHFILE, 'w')
+                self.helpFile.createFile(pathFile=self.config.getPathFileIndividual(), suffix='individual.txt')            
+            file = open(self.config.getPathFileIndividual(), 'w')
             posIndividual = 0
             for individual in self.individuals:
                 posIndividual += 1
                 individualFile = individual.toMap()
-                file.write(str(individualFile) + '\n')
+                file.write(json.dumps(individualFile, indent=4))
                 percent = self.helpFile.getPorcentSave(size=self.sizePopulation, position=posIndividual)
                 print(f'Progesso: {percent}%')
             file.close()
@@ -98,8 +103,8 @@ class Population:
 
     def _getFile(self, world):
         try:
-            if os.path.exists(self._PATHFILE):
-                file = open(self._PATHFILE, 'r')
+            if os.path.exists(self.config.getPathFileIndividual()):
+                file = open(self.config.getPathFileIndividual(), 'r')
                 linhas = file.readlines()
                 file.close()
                 _individuals = []

@@ -1,0 +1,17 @@
+{
+    "sizePopulation": 20,
+    "numberOfGerations": 20,
+    "mutationRate": 0.13,
+    "numActionsIndividual": 200,
+    "saveGeneration": false,
+    "getSaved": false,
+    "pathFileIndividual": "modules/individual/repository/individual.txt",
+    "sizeWorld": 10,
+    "pathFileWorld": "modules/world/repository/world.txt",
+    "withParede": true,
+    "saveWorld": false,
+    "getSavedWorld": false,
+    "generateWorld": true,
+    "printWorld": false,
+    "negativeFitness": false
+}

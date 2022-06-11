@@ -145,9 +145,7 @@ Print do Resultado acima !
 ---
 # ***Referências*** 
 
-- KABÁTH David **Algoritmos genéticos. Site Postado Yahoo. Internet: 2010.**
-
-< Acessado em 05/2022 >.
+- KABÁTH David **Algoritmos genéticos. Site Postado Yahoo. Internet: 2010.** < Acessado em 05/2022 >.
 
 - LUCA C. Diogo Apostilia de Introdução a Algoritmos Geneticos : Principios e Aplicações. Março 2002 < Acessado em 05/2022 >. 
 

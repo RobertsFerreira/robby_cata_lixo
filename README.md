@@ -100,13 +100,13 @@ A Linguagem de programação escolhida pela equipe para desenvolver o projeto fo
 
 A seguir temos um exemplo de resultados com as seguintes configurações: 
 
-- *Tamanho da população: 20*
+- *Tamanho da população: 20
 
-- *Numero de gerações: 20*
+- *Numero de gerações: 20
 
-- *Taxa de mutação: 0,13*
+- *Taxa de mutação: 0,13
 
-- *Numero de ações individuais: 200*
+- *Numero de ações individuais: 200
 
 
 ![image](https://user-images.githubusercontent.com/88808709/173194867-1e926287-fa75-444a-b44e-211321be1716.png)
@@ -116,11 +116,11 @@ Print do Resultado acima !
 ---
 A seguir temos um exemplo de resultados com as seguintes configurações: 
 
-- *Tamanho da população: 10*
+- *Tamanho da população: 10
 
-- *Numero de gerações: 10*
+- *Numero de gerações: 10
 
-- *Taxa de mutação: 0,10*
+- *Taxa de mutação: 0,10
 
 - *Numero de ações individuais: 150
 
@@ -132,11 +132,11 @@ Print do Resultado acima !
 ---
 A seguir temos um exemplo de resultados com as seguintes configurações: 
 
-- *Tamanho da população: 15*
+- *Tamanho da população: 15
 
-- *Numero de gerações: 15*
+- *Numero de gerações: 15
 
-- *Taxa de mutação: 0,08*
+- *Taxa de mutação: 0,08
 
 - *Numero de ações individuais: 125
 

@@ -122,12 +122,13 @@ A seguir temos um exemplo de resultados com as seguintes configurações:
 
 - *Taxa de mutação: 0,10*
 
-- * Numero de ações individuais: 150*
+- *Numero de ações individuais: 150
 
 
 ![image](https://user-images.githubusercontent.com/88808709/173196110-a8fa1baf-4b8d-429d-bd03-02c99a19267b.png)
 
 Print do Resultado acima !
+
 ---
 A seguir temos um exemplo de resultados com as seguintes configurações: 
 
@@ -137,11 +138,12 @@ A seguir temos um exemplo de resultados com as seguintes configurações:
 
 - *Taxa de mutação: 0,08*
 
-- * Numero de ações individuais: 125*
+- *Numero de ações individuais: 125
 
 ![image](https://user-images.githubusercontent.com/88808709/173196254-45e68dff-c703-4180-8e92-08d6adfeae12.png)
 
 Print do Resultado acima !
+
 ---
 # ***Referências*** 
 
